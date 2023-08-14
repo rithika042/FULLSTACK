@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do List</title>
+    <style>
+body{
+  background-image: url('https://static.vecteezy.com/system/resources/thumbnails/013/089/133/small/abstract-soft-focus-sunset-field-landscape-of-white-flowers-and-grass-meadow-warm-golden-hour-sunset-sunrise-time-tranquil-spring-summer-nature-closeup-and-blurred-forest-background-idyllic-nature-photo.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<center>
+    <h1>To-Do List</h1>
+    <div>
+        <button class="btn" id="logout-btn" onclick="handleLogout()">
+            <i class="fa fa-sign-out"></i> Logout
+        </button>
+    </div>
+
+    <input type="text" id="taskInput" placeholder="Enter a new task">
+    <input type="date" id="dueDateInput">
+    <input type="time" id="dueTimeInput">
+    <button onclick="addTask()">Add Task</button>
+
+    <ul id="taskList"></ul>
+</center>
+<script>
+    // Your existing code
+
+    function addTask() {
+        var input = document.getElementById("taskInput");
+        var task = input.value;
+        var dueDate = document.getElementById("dueDateInput").value;
+        var dueTime = document.getElementById("dueTimeInput").value;
+
+        if (task !== "") {
+            var li = document.createElement("li");
+            li.textContent = task;
+
+            var span = document.createElement("span");
+            span.textContent = "Due Date: " + dueDate + " " + "Due Time: " + dueTime;
+
+            var deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.onclick = function() {
+                this.parentNode.remove();
+            };
+
+            li.appendChild(span);
+            li.appendChild(deleteButton);
+
+            document.getElementById("taskList").appendChild(li);
+            input.value = "";
+            document.getElementById("dueDateInput").value = "";
+            document.getElementById("dueTimeInput").value = "";
+
+            // Set a timeout to show an alert when the task is not completed within the given time
+            var currentDate = new Date();
+            var dueDateTime = new Date(dueDate + " " + dueTime);
+            var timeDifference = dueDateTime.getTime() - currentDate.getTime();
+
+            if (timeDifference > 0) {
+                setTimeout(function() {
+                    if (!li.classList.contains("completed")) {
+                        alert("Reminder: Task '" + task + "' is due!");
+                        li.remove(); // Remove the task after showing the reminder
+                    }
+                }, timeDifference);
+            }
+        }
+    }
+</script>
+</body>
+</html>
